@@ -1,0 +1,20 @@
+---
+- name: Install required packages
+  apt:
+    name: auditd
+    state: present
+
+- name: Enable auditd service
+  service:
+    name: auditd
+    state: started
+    enabled: yes
+
+- name: Configure audit rules
+  copy:
+    src: auditd/audit.rules
+    dest: /etc/audit/rules.d/audit.rules
+    owner: root
+    group: root
+    mode: '0600'
+  notify: Restart auditd

@@ -1,0 +1,28 @@
+---
+- name: Include UFW configuration tasks
+  include_tasks: ufw.yml
+  tags: ['security', 'ufw']
+
+- name: Include fail2ban configuration tasks
+  include_tasks: fail2ban.yml
+  tags: ['security', 'fail2ban']
+
+- name: Include rkhunter configuration tasks
+  include_tasks: rkhunter.yml
+  tags: ['security', 'rkhunter']
+
+- name: Include system configuration tasks
+  include_tasks: system.yml
+  tags: ['security', 'system']
+
+- name: Include auditd configuration tasks
+  include_tasks: auditd.yml
+  tags: ['security', 'auditd']
+
+- name: Include logrotate configuration tasks
+  include_tasks: logrotate.yml
+  tags: ['security', 'logrotate']
+
+- name: Include SSH configuration tasks
+  include_tasks: ssh.yml
+  tags: ['security', 'ssh']

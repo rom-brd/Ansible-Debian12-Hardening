@@ -1,0 +1,11 @@
+---
+- name: Configure Debian 12 server
+  hosts: debian_servers
+  become: yes
+  roles:
+    - role: common
+      tags: ['common', 'system']
+    - role: docker
+      tags: ['docker', 'containers']
+    - role: security
+      tags: ['security', 'hardening']

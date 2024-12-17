@@ -1,0 +1,34 @@
+---
+- name: Set up sudo config
+  copy:
+    dest: /etc/sudoers.d/admin
+    content: |
+      %sudo ALL=(ALL) NOPASSWD: ALL
+    mode: '0440'
+    validate: 'visudo -cf %s'
+
+- name: Create users
+  user:
+    name: "{{ item.username }}"
+    groups: "{{ item.groups | default([]) }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    state: present
+  loop: "{{ global_config.users }}"
+
+- name: Ensure user home directories exist
+  file:
+    path: "/home/{{ item.username }}"
+    state: directory
+    mode: '0750'
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}"
+  loop: "{{ global_config.users }}"
+
+- name: Create bashrc for users
+  copy:
+    src: zshrc
+    dest: "/home/{{ item.username }}/.zshrc"
+    mode: '0644'
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}"
+  loop: "{{ global_config.users }}"

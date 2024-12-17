@@ -1,0 +1,32 @@
+---
+- name: Install openssh-server
+  apt:
+    name: openssh-server
+    state: present
+
+- name: Ensure .ssh directory exists
+  file:
+    path: "/home/{{ item.username }}/.ssh"
+    state: directory
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}"
+    mode: '0700'
+  loop: "{{ global_config.users }}"
+
+- name: Add authorized SSH keys
+  authorized_key:
+    user: "{{ item.username }}"
+    key: "{{ item.ssh_keys | join('\n') }}"
+    state: present
+  loop: "{{ global_config.users }}"
+  when: item.ssh_keys is defined and item.ssh_keys | length > 0
+
+- name: Copy SSH configuration
+  copy:
+    src: sshd/sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0600'
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: Reloaded SSH

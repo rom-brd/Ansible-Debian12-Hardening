@@ -1,0 +1,2 @@
+[debian_servers]
+sandbox ansible_host=X.X.X.X ansible_user=XXXXXX

@@ -1,0 +1,42 @@
+# Port and protocol settings
+Port 22
+Protocol 2
+
+# Authentication settings
+PermitRootLogin no
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+MaxAuthTries 3
+MaxSessions 4
+
+# Restriction settings
+X11Forwarding no
+AllowTcpForwarding yes
+AllowAgentForwarding no
+PermitEmptyPasswords no
+IgnoreRhosts yes
+HostbasedAuthentication no
+PermitUserEnvironment no
+StrictModes yes
+AcceptEnv LANG LC_*
+
+# Timing settings
+LoginGraceTime 30
+ClientAliveInterval 300
+ClientAliveCountMax 2
+
+# Additional security settings
+UsePAM yes
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+
+# Override default of no subsystems
+Subsystem sftp	/usr/lib/openssh/sftp-server
+
+# Security ciphers and algorithms
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com

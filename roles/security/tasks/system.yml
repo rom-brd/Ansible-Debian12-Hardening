@@ -1,0 +1,16 @@
+---
+- name: Install AppArmor
+  apt:
+    name:
+      - apparmor
+      - apparmor-utils
+    state: present
+
+- name: Configure journald
+  copy:
+    dest: /etc/systemd/journald.conf
+    content: |
+      [Journal]
+      SystemMaxUse=10G
+      SystemMaxFileSize=100M
+      MaxRetentionSec=3month

@@ -1,0 +1,32 @@
+## First rule - delete all
+-D
+
+## Buffer size
+-b 8192
+
+## Surveillance des modules noyau
+-w /sbin/insmod -p x -k audit_modules
+-w /sbin/modprobe -p x -k audit_modules
+-w /sbin/rmmod -p x -k audit_modules
+
+## Modifications dans /etc/
+-w /etc/ -p wa -k audit_conf
+
+## Surveillance montage/démontage
+-a exit,always -S mount -S umount2 -k audit_mount
+
+## Syscalls suspects
+-a exit,always -S ioperm -S modify_ldt -k audit_syscall
+-a exit,always -S get_kernel_syms -S ptrace -S prctl -k audit_syscall
+
+## Surveillance fichiers (création/suppression)
+-a exit,always -F arch=b64 -S unlink -S rmdir -S rename -k audit_files
+-a exit,always -F arch=b64 -S creat -S open -S openat -F exit=-EACCESS -k audit_files
+-a exit,always -F arch=b64 -S truncate -S ftruncate -F exit=-EACCESS -k audit_files
+
+## Surveillance sudo et su
+-w /var/log/sudo.log -p wa -k sudo_log
+-w /usr/bin/sudo -p x -k sudo_actions
+
+## Make the configuration immutable
+-e 2

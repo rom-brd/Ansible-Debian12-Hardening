@@ -1,0 +1,18 @@
+---
+# Global environment variables
+global_config:
+  timezone: 'Europe/Paris'
+  locale: 'fr_FR.UTF-8'
+
+  users:
+    - username: kpladmin
+      groups: ['sudo']
+      shell: /bin/zsh
+      ssh_keys:
+        - "ssh-rsa AAAA..."
+        - "ssh-rsa BBBB..."
+    - username: kpladmin2
+      groups: ['sudo']
+      shell: /bin/zsh
+      ssh_keys:
+        - "ssh-rsa CCCC..."

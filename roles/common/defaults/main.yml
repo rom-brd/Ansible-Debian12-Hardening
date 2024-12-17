@@ -1,0 +1,48 @@
+---
+# Basic system packages
+common_packages:
+  system:
+    - aptitude
+    - vim
+    - curl
+    - wget
+    - htop
+    - net-tools
+    - unzip
+    - git
+    - tmux
+    - tree
+    - ncdu
+    - mtr
+    - rsync
+    - tar
+    - jq
+    - nmap
+    - zsh
+  monitoring:
+    - atop
+    - iotop
+    - sysstat
+    - iftop
+  security:
+    - acl
+    - sudo
+    - gnupg
+    - apt-transport-https
+    - ca-certificates
+
+common_config:
+  sysctl:
+    # System
+    vm.swappiness: 10
+    vm.dirty_ratio: 30
+    vm.dirty_background_ratio: 5
+
+    # Docker specific
+    vm.max_map_count: 262144
+    fs.file-max: 65536
+
+    # Security
+    net.ipv4.tcp_syncookies: 1
+    kernel.core_uses_pid: 1
+    net.ipv4.icmp_echo_ignore_broadcasts: 1

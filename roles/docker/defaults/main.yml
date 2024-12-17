@@ -1,0 +1,23 @@
+---
+# Docker configuration
+docker_config:
+  daemon_config:
+    log-driver: "json-file"
+    log-opts:
+      max-size: "5m"
+      max-file: "5"
+    storage-driver: "overlay2"
+    default-ulimits:
+      nofile:
+        Name: nofile
+        Hard: 64000
+        Soft: 64000
+    dns:
+      - "9.9.9.9"
+      - "1.1.1.1"
+    live-restore: true
+    userland-proxy: false
+    no-new-privileges: true
+    default-address-pools:
+      - base: "172.17.0.0/16"
+        size: 24

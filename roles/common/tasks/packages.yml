@@ -1,0 +1,20 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install system packages
+  apt:
+    name: "{{ common_packages.system }}"
+    state: latest
+
+- name: Install monitoring packages
+  apt:
+    name: "{{ common_packages.monitoring }}"
+    state: latest
+
+- name: Install security packages
+  apt:
+    name: "{{ common_packages.security }}"
+    state: latest

@@ -1,0 +1,20 @@
+---
+- name: Reloaded SSH
+  service:
+    name: sshd
+    state: reloaded
+
+- name: Restart fail2ban
+  service:
+    name: fail2ban
+    state: restarted
+
+- name: Restart auditd
+  service:
+    name: auditd
+    state: restarted
+
+- name: Restart Logrotate
+  service:
+    name: logrotate
+    state: restarted

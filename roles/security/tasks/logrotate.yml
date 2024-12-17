@@ -1,0 +1,28 @@
+---
+- name: Install logrotate
+  apt:
+    name: logrotate
+    state: present
+
+- name: Enable logrotate service
+  service:
+    name: logrotate
+    state: started
+    enabled: yes
+
+- name: Ensure logrotate.d directory exists
+  file:
+    path: /etc/logrotate.d
+    state: directory
+    mode: '0755'
+
+- name: Deploy logrotate configurations
+  copy:
+    src: "logrotate/{{ item }}"
+    dest: "/etc/logrotate.d/{{ item | splitext | first }}"
+    mode: '0644'
+  with_items:
+    - audit.conf
+    - fail2ban.conf
+    - rkhunter.conf
+  notify: Restart Logrotate

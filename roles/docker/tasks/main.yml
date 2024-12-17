@@ -1,0 +1,57 @@
+---
+- name: Install required packages
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    state: latest
+    update_cache: true
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    state: present
+
+- name: Install Docker
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: latest
+    update_cache: yes
+
+- name: Enable Docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Configure Docker daemon
+  copy:
+    content: "{{ docker_config.daemon_config | to_nice_json }}"
+    dest: /etc/docker/daemon.json
+    mode: '0644'
+  notify: Restart Docker
+
+- name: Create docker group
+  group:
+    name: docker
+    state: present
+
+- name: Add users to docker group
+  user:
+    name: "{{ item.username }}"
+    groups: docker
+    append: yes
+  loop: "{{ global_config.users }}"
