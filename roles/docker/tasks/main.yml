@@ -1,57 +1,57 @@
 ---
 - name: Install required packages
-  apt:
+  ansible.builtin.apt:
     name:
       - apt-transport-https
       - ca-certificates
       - curl
       - gnupg
       - lsb-release
-    state: latest
+    state: present
     update_cache: true
 
 - name: Add Docker GPG key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://download.docker.com/linux/debian/gpg
     state: present
 
 - name: Add Docker repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
     state: present
 
 - name: Install Docker
-  apt:
+  ansible.builtin.apt:
     name:
       - docker-ce
       - docker-ce-cli
       - containerd.io
       - docker-buildx-plugin
       - docker-compose-plugin
-    state: latest
-    update_cache: yes
+    state: present
+    update_cache: true
 
 - name: Enable Docker
-  service:
+  ansible.builtin.service:
     name: docker
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Configure Docker daemon
-  copy:
+  ansible.builtin.copy:
     content: "{{ docker_config.daemon_config | to_nice_json }}"
     dest: /etc/docker/daemon.json
     mode: '0644'
   notify: Restart Docker
 
 - name: Create docker group
-  group:
+  ansible.builtin.group:
     name: docker
     state: present
 
 - name: Add users to docker group
-  user:
+  ansible.builtin.user:
     name: "{{ item.username }}"
     groups: docker
-    append: yes
+    append: true
   loop: "{{ global_config.users }}"

@@ -1,17 +1,17 @@
 ---
 - name: Install required packages
-  apt:
+  ansible.builtin.apt:
     name: auditd
     state: present
 
 - name: Enable auditd service
-  service:
+  ansible.builtin.service:
     name: auditd
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Configure audit rules
-  copy:
+  ansible.builtin.copy:
     src: auditd/audit.rules
     dest: /etc/audit/rules.d/audit.rules
     owner: root

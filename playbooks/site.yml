@@ -1,7 +1,10 @@
 ---
 - name: Configure Debian 12 server
   hosts: debian_servers
-  become: yes
+  become: true
+  become_method: ansible.builtin.su
+  become_user: root
+  become_flags: "-"
   roles:
     - role: common
       tags: ['common', 'system']

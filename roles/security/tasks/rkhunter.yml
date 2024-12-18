@@ -1,17 +1,17 @@
 ---
 - name: Install rkhunter
-  apt:
+  ansible.builtin.apt:
     name: rkhunter
     state: present
 
 - name: Create rkhunter scripts directory
-  file:
+  ansible.builtin.file:
     path: /etc/rkhunter.d
     state: directory
     mode: '0755'
 
 - name: Configure Docker whitelist for rkhunter
-  copy:
+  ansible.builtin.copy:
     dest: /etc/rkhunter.d/docker.conf
     content: |
       # Whitelist Docker
@@ -20,9 +20,12 @@
       ALLOWHIDDENDIR=/run/docker
       ALLOWDEVFILE=/var/run/docker.sock
       ALLOWPROCLISTEN=/usr/bin/dockerd
+    owner: root
+    group: root
+    mode: '0755'
 
 - name: Configure rkhunter main settings
-  copy:
+  ansible.builtin.copy:
     dest: /etc/rkhunter.d/main.conf
     content: |
       # Main configuration
@@ -34,12 +37,16 @@
       DBDIR=/var/lib/rkhunter/db
       SCRIPTDIR=/usr/share/rkhunter/scripts
       DISABLE_TESTS=suspscan hidden_ports hidden_procs deleted_files packet_cap_apps apps
-  notify: Run rkhunter update
+    owner: root
+    group: root
+    mode: '0755'
 
 - name: Setup daily rkhunter check
-  copy:
+  ansible.builtin.copy:
     dest: /etc/cron.daily/rkhunter
     content: |
       #!/bin/sh
       /usr/bin/rkhunter --cronjob --quiet
+    owner: root
+    group: root
     mode: '0755'

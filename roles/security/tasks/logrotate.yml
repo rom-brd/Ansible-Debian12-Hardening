@@ -1,23 +1,23 @@
 ---
 - name: Install logrotate
-  apt:
+  ansible.builtin.apt:
     name: logrotate
     state: present
 
 - name: Enable logrotate service
-  service:
-    name: logrotate
+  ansible.builtin.systemd:
+    name: logrotate.timer
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure logrotate.d directory exists
-  file:
+  ansible.builtin.file:
     path: /etc/logrotate.d
     state: directory
     mode: '0755'
 
 - name: Deploy logrotate configurations
-  copy:
+  ansible.builtin.copy:
     src: "logrotate/{{ item }}"
     dest: "/etc/logrotate.d/{{ item | splitext | first }}"
     mode: '0644'

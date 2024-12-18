@@ -1,16 +1,19 @@
 ---
 - name: Install AppArmor
-  apt:
+  ansible.builtin.apt:
     name:
       - apparmor
       - apparmor-utils
     state: present
 
 - name: Configure journald
-  copy:
+  ansible.builtin.copy:
     dest: /etc/systemd/journald.conf
     content: |
       [Journal]
       SystemMaxUse=10G
       SystemMaxFileSize=100M
       MaxRetentionSec=3month
+    owner: root
+    group: root
+    mode: '0644'

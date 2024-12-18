@@ -13,5 +13,5 @@
     name: "{{ item.key }}"
     value: "{{ item.value }}"
     state: present
-    reload: yes
+    reload: true
   with_dict: "{{ common_config.sysctl }}"

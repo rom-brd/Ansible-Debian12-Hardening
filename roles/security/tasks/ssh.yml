@@ -1,11 +1,11 @@
 ---
 - name: Install openssh-server
-  apt:
+  ansible.builtin.apt:
     name: openssh-server
     state: present
 
 - name: Ensure .ssh directory exists
-  file:
+  ansible.builtin.file:
     path: "/home/{{ item.username }}/.ssh"
     state: directory
     owner: "{{ item.username }}"
@@ -22,7 +22,7 @@
   when: item.ssh_keys is defined and item.ssh_keys | length > 0
 
 - name: Copy SSH configuration
-  copy:
+  ansible.builtin.copy:
     src: sshd/sshd_config
     dest: /etc/ssh/sshd_config
     owner: root

@@ -1,20 +1,20 @@
 ---
 - name: Reloaded SSH
-  service:
+  ansible.builtin.service:
     name: sshd
     state: reloaded
 
 - name: Restart fail2ban
-  service:
+  ansible.builtin.service:
     name: fail2ban
     state: restarted
 
 - name: Restart auditd
-  service:
+  ansible.builtin.service:
     name: auditd
     state: restarted
 
 - name: Restart Logrotate
-  service:
+  ansible.builtin.service:
     name: logrotate
     state: restarted

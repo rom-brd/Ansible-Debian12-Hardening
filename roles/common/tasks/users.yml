@@ -1,22 +1,23 @@
 ---
 - name: Set up sudo config
-  copy:
+  ansible.builtin.copy:
     dest: /etc/sudoers.d/admin
     content: |
       %sudo ALL=(ALL) NOPASSWD: ALL
     mode: '0440'
-    validate: 'visudo -cf %s'
+    validate: '/usr/sbin/visudo -cf %s'
 
 - name: Create users
-  user:
+  ansible.builtin.user:
     name: "{{ item.username }}"
     groups: "{{ item.groups | default([]) }}"
     shell: "{{ item.shell | default('/bin/bash') }}"
+    append: true
     state: present
   loop: "{{ global_config.users }}"
 
 - name: Ensure user home directories exist
-  file:
+  ansible.builtin.file:
     path: "/home/{{ item.username }}"
     state: directory
     mode: '0750'
@@ -25,7 +26,7 @@
   loop: "{{ global_config.users }}"
 
 - name: Create bashrc for users
-  copy:
+  ansible.builtin.copy:
     src: zshrc
     dest: "/home/{{ item.username }}/.zshrc"
     mode: '0644'
