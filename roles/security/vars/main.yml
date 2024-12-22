@@ -1,0 +1,3 @@
+ssh_service_name:
+  Ubuntu: "ssh"
+  Debian: "sshd"

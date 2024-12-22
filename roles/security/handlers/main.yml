@@ -1,7 +1,7 @@
 ---
 - name: Reloaded SSH
   ansible.builtin.service:
-    name: sshd
+    name: "{{ ssh_service_name[ansible_distribution] }}"
     state: reloaded
 
 - name: Restart fail2ban

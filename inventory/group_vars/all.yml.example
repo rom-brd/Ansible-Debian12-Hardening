@@ -1,4 +1,11 @@
 ---
+# Ansible configuration
+ansible_become_passwords:
+  server1: yourpassword
+  server2: yourpassword
+
+ansible_become_password: "{{ ansible_become_passwords[inventory_hostname] }}"
+
 # Global environment variables
 global_config:
   timezone: 'Europe/Paris'
@@ -10,7 +17,7 @@ global_config:
       shell: /bin/zsh
       ssh_keys:
         - "ssh-rsa AAAA..."
-        - "ssh-rsa BBBB..."
+        - "ecdsa-sha2-nistp256 BBBB..."
     - username: kpladmin2
       groups: ['sudo']
       shell: /bin/zsh

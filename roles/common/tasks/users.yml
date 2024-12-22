@@ -25,7 +25,7 @@
     group: "{{ item.username }}"
   loop: "{{ global_config.users }}"
 
-- name: Create bashrc for users
+- name: Create zshrc for users
   ansible.builtin.copy:
     src: zshrc
     dest: "/home/{{ item.username }}/.zshrc"

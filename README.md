@@ -1,5 +1,5 @@
-# 🚀 Ansible Server Setup - Debian 12
-Un projet Ansible pour configurer rapidement et sécuriser un serveur Debian 12 avec Docker !
+# 🚀 Ansible Server Setup - Debian & Ubuntu
+Un projet Ansible pour configurer rapidement et sécuriser un serveur Debian ou Ubuntu avec Docker !
 
 ## 🎯 Fonctionnalités
 - ⚙️ Configuration système de base (paquets, utilisateurs, shell zsh)
@@ -10,47 +10,69 @@ Un projet Ansible pour configurer rapidement et sécuriser un serveur Debian 12 
 
 ## ⚠️ Prérequis
 - Ansible 2.9+
-- Serveur Debian 12 fraîchement installé avec :
+- Configuration initiale requise :
   - Un utilisateur non-root
   - Un utilisateur root
   - OpenSSH installé (`apt install openssh-server`)
 
+## 💻 Distributions supportées et testées
+- ✅ Debian 12 (Bookworm)
+- ✅ Ubuntu 24.04 (Noble Numbat)
+
 ## 🏃 Démarrage rapide
 1. Clonez le projet
 
-2. Configurez vos serveurs dans `inventory/hosts`:
-```ini
-[debian_servers]
-monserver ansible_host=X.X.X.X ansible_user=monuser
+2. Copiez les fichiers d'exemple :
+```bash
+cp inventory/hosts.example inventory/hosts
+cp inventory/group_vars/all.yml.example inventory/group_vars/all.yml
 ```
 
-3. Configurez l'accès SSH au serveur :
+3. Configurez vos serveurs dans `inventory/hosts`:
+```ini
+[linux_servers]
+server1 ansible_host=X.X.X.X ansible_user=monuser
+server2 ansible_host=Y.Y.Y.Y ansible_user=monuser2
+```
+
+4. Configurez l'accès SSH au serveur :
 ```bash
 # Générer une paire de clés SSH si vous n'en avez pas
 ssh-keygen -t ed25519
 
-# Copier votre clé publique sur le serveur
+# Copier votre clé publique sur le(s) serveur(s)
 ssh-copy-id -i ~/.ssh/id_ed25519.pub user@X.X.X.X
 ```
 
-4. Configurez vos utilisateurs dans `inventory/group_vars/all.yml`:
+5. Configurez vos variables dans `inventory/group_vars/all.yml`:
 ```yaml
-users:
-  - username: monutilisateur
-    groups: ['sudo']
-    shell: /bin/zsh
-    ssh_keys:
-      - VOTRE_CLE_SSH
+# Mots de passe sudo/su par serveur
+ansible_become_passwords:
+  server1: "votre_mot_de_passe_server1"
+  server2: "votre_mot_de_passe_server2"
+
+ansible_become_password: "{{ ansible_become_passwords[inventory_hostname] }}"
+
+# Configuration globale
+global_config:
+  timezone: 'Europe/Paris'
+  locale: 'fr_FR.UTF-8'
+  users:
+    - username: monutilisateur
+      groups: ['sudo']
+      shell: /bin/zsh
+      ssh_keys:
+        - VOTRE_CLE_SSH
 ```
 
-5. Lancez le playbook:
+6. Lancez le playbook:
 ```bash
 # Installation complète
-ansible-playbook playbooks/site.yml --ask-become-pass
+ansible-playbook playbooks/site.yml
 
 # Installation sélective avec tags
-ansible-playbook playbooks/site.yml --ask-become-pass --tags "common,docker"  # Juste common et docker
-ansible-playbook playbooks/site.yml --ask-become-pass --tags security         # Juste la sécurité
+ansible-playbook playbooks/site.yml --tags "common,docker"  # Juste common et docker
+ansible-playbook playbooks/site.yml --tags security         # Juste la sécurité
 ```
 
 ## 🏷️ Tags disponibles

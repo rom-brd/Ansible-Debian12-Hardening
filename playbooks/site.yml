@@ -1,10 +1,19 @@
 ---
-- name: Configure Debian 12 server
-  hosts: debian_servers
+- name: Verify supported distribution
+  hosts: linux_servers
+  gather_facts: true
+  tasks:
+    - name: Check if distribution is supported
+      ansible.builtin.fail:
+        msg: "Distribution {{ ansible_distribution }} is not supported. Only Debian and Ubuntu are supported."
+      when: ansible_distribution not in ['Debian', 'Ubuntu']
+
+- name: Configure Debian/Ubuntu server
+  hosts: linux_servers
   become: true
-  become_method: ansible.builtin.su
+  become_method: "{{ 'su' if ansible_distribution == 'Debian' else 'ansible.builtin.sudo' }}"
   become_user: root
-  become_flags: "-"
+  become_flags: "{{ '-' if ansible_distribution == 'Debian' else '' }}"
   roles:
     - role: common
       tags: ['common', 'system']
