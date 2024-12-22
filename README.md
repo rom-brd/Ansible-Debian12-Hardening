@@ -45,6 +45,12 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub user@X.X.X.X
 ```
 
 5. Configurez vos variables dans `inventory/group_vars/all.yml`:
+⚠️ **IMPORTANT: Configuration des mots de passe**
+- Les mots de passe configurés ici sont uniquement pour l'élévation de privilèges (sudo/su)
+- Il ne s'agit PAS des mots de passe de vos utilisateurs
+- L'authentification de vos utilisateurs est déjà gérée par les clés SSH configurées à l'étape 4
+- Pour Debian, utilisez le mot de passe root
+- Pour Ubuntu, utilisez le mot de passe sudo de votre utilisateur
 ```yaml
 # Mots de passe sudo/su par serveur
 ansible_become_passwords:
