@@ -8,6 +8,15 @@
     name: "{{ global_config.locale }}"
     state: present
 
+- name: Set locale environment variables
+  ansible.builtin.copy:
+    dest: /etc/default/locale
+    content: |
+      LANG={{ global_config.locale }}
+      LANGUAGE={{ global_config.locale }}
+      LC_ALL={{ global_config.locale }}
+    mode: '0644' # rw-r--r--
+
 - name: Configure sysctl parameters
   sysctl:
     name: "{{ item.key }}"

@@ -4,7 +4,7 @@
     dest: /etc/sudoers.d/admin
     content: |
       %sudo ALL=(ALL) NOPASSWD: ALL
-    mode: '0440'
+    mode: '0440' # r--r-----
     validate: '/usr/sbin/visudo -cf %s'
 
 - name: Create users
@@ -20,7 +20,7 @@
   ansible.builtin.file:
     path: "/home/{{ item.username }}"
     state: directory
-    mode: '0750'
+    mode: '0750' # rwxr-x---
     owner: "{{ item.username }}"
     group: "{{ item.username }}"
   loop: "{{ global_config.users }}"
@@ -29,7 +29,7 @@
   ansible.builtin.copy:
     src: zshrc
     dest: "/home/{{ item.username }}/.zshrc"
-    mode: '0644'
+    mode: '0644' # rw-r--r--
     owner: "{{ item.username }}"
     group: "{{ item.username }}"
   loop: "{{ global_config.users }}"
