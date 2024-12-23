@@ -2,6 +2,7 @@
 # Docker configuration
 docker_config:
   daemon_config:
+    log-level: "warn"
     log-driver: "json-file"
     log-opts:
       max-size: "5m"
@@ -18,6 +19,3 @@ docker_config:
     live-restore: true
     userland-proxy: false
     no-new-privileges: true
-    default-address-pools:
-      - base: "172.17.0.0/16"
-        size: 24
